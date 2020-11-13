@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">SMSService</string>
+
+    <string name="btn_check_certificate">Check certificate availability</string>
+    <string name="btn_start_server">Start Server</string>
+    <string name="btn_delete_messages">Delete Messages\n(older than 2 Weeks)</string>
+    <string name="txtView_keystore_password">Keystore Password</string>
+    <string name="txtView_access_password">Access Password</string>
+    <string name="txtView_username">Username</string>
+    <string name="txtView_keystore_path">Keystore Path</string>
+    <string name="toast_server_terminated_successfully">Server terminated successfully</string>
+    <string name="toast_server_terminated_failed">Server was stopped due a major error</string>
+
+
+    <string name="saved_username_key" translatable="false">username</string>
+    <string name="saved_password_key" translatable="false">password</string>
+    <string name="saved_keyStore_password_key" translatable="false">keyStorePassword</string>
+    <string name="saved_certificate_uri_str_key" translatable="false">certificateUriStr</string>
+    <string name="btn_certificate_content_Description">Select Keystore with system picker</string>
+    <string name="editTextPasswort_hint" translatable="false">123</string>
+    <string name="editTextUserName_hint" translatable="false">admin</string>
+
+
+</resources>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:baselineAligned="false"
+    android:gravity="center|fill_vertical"
+    tools:context="net.folivo.android.smsGatewayServer.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/linLayoutServerOptions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/border"
+        android:backgroundTintMode="src_atop"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/linLayoutCertificateOptions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchStartServer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_start_server" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:baselineAligned="true"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/txtViewUsername"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:labelFor="@id/editTextUserName"
+                android:text="@string/txtView_username" />
+
+            <EditText
+                android:id="@+id/editTextUserName"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:autofillHints="username"
+                android:ems="10"
+                android:hint="@string/editTextUserName_hint"
+                android:inputType="textPersonName" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/textViewPassword"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:labelFor="@id/editTextPassword"
+                android:text="@string/txtView_access_password" />
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:autofillHints="password"
+                android:ems="10"
+                android:hint="@string/editTextPasswort_hint"
+                android:inputType="textPassword" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linLayoutCertificateOptions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/border"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@id/linLayoutDeleteMessagesOptions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linLayoutServerOptions">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/textViewPathKeyStore"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:labelFor="@id/editTextPathKeyStore"
+                android:text="@string/txtView_keystore_path" />
+
+            <EditText
+                android:id="@+id/editTextPathKeyStore"
+                android:layout_width="144dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:autofillHints=""
+                android:ems="10"
+                android:inputType="textUri" />
+
+            <ImageButton
+                android:id="@+id/buttonCertificate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:contentDescription="@string/btn_certificate_content_Description"
+                app:srcCompat="?android:attr/actionModeFindDrawable" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/textViewKeyStorePassword"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:labelFor="@id/editTextKeyStorePassword"
+                android:text="@string/txtView_keystore_password" />
+
+            <EditText
+                android:id="@+id/editTextKeyStorePassword"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:autofillHints=""
+                android:ems="10"
+                android:inputType="textPassword" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonCheckCertificateAvailability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_check_certificate" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linLayoutDeleteMessagesOptions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linLayoutCertificateOptions">
+
+        <Button
+            android:id="@+id/buttonDeleteMessages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_delete_messages" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

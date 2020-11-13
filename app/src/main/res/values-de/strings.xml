@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMSService</string>
+
+    <string name="btn_check_certificate">Überprüfe Zertifikatverfügbarkeit</string>
+    <string name="btn_start_server">Server starten</string>
+    <string name="btn_delete_messages">Lösche Nachrichten\n(älter als 2 Wochen)</string>
+    <string name="txtView_keystore_password">Keystore Passwort</string>
+    <string name="txtView_access_password">Zugangspasswort</string>
+    <string name="txtView_username">Benutzername</string>
+    <string name="txtView_keystore_path">Keystore Pfad</string>
+
+    <string name="toast_server_terminated_successfully">Der Server wurde erfolgreich gestoppt</string>
+    <string name="toast_server_terminated_failed">Der Server wurde aufgrund eines Fehlers gestoppt</string>
+    <string name="btn_certificate_content_Description">Wähle Keystore mit der Systemauswahl</string>
+
+</resources>
