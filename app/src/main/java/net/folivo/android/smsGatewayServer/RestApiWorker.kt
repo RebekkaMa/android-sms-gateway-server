@@ -147,7 +147,7 @@ class RestApiWorker(appContext: Context, workerParams: WorkerParameters) :
                                         )
                                         return@post
                                     }
-                                    call.respond(result)
+                                    call.respondText(result.second, status=result.first)
                                 }
                                 get("/") {
                                     call.respondText { "android sms gateway server ($appVersion) is running" }
