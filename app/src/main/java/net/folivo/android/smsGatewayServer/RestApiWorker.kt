@@ -114,7 +114,7 @@ class RestApiWorker(appContext: Context, workerParams: WorkerParameters) :
                         install(CallLogging)
                         install(Authentication) {
                             basic {
-                                realm = "Ktor Server"
+                                realm = "Android SMS Gateway Server"
                                 validate { credentials ->
                                     if (credentials.password == password && credentials.name == username
                                     )
