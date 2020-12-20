@@ -143,7 +143,7 @@ class RestApiWorker(appContext: Context, workerParams: WorkerParameters) :
                                     catch (illegalArgumentException : java.lang.IllegalArgumentException){
                                         Log.i(logTag, illegalArgumentException.stackTraceToString())
                                         call.respondText(
-                                                illegalArgumentException.stackTraceToString(),
+                                                illegalArgumentException.toString(),
                                                 status = HttpStatusCode.BadRequest
                                         )
                                         return@post
@@ -151,7 +151,7 @@ class RestApiWorker(appContext: Context, workerParams: WorkerParameters) :
                                     catch (exception: java.lang.Exception) {
                                         Log.i(logTag, exception.stackTraceToString())
                                         call.respondText(
-                                            exception.stackTraceToString(),
+                                            exception.toString(),
                                             status = HttpStatusCode.InternalServerError
                                         )
                                         return@post
@@ -179,7 +179,7 @@ class RestApiWorker(appContext: Context, workerParams: WorkerParameters) :
                                                 } catch (e: Exception) {
                                                     Log.w(logTag, e.stackTraceToString())
                                                     call.respondText(
-                                                        e.stackTraceToString(),
+                                                        e.toString(),
                                                         status = HttpStatusCode.InternalServerError
                                                     )
                                                     return@get
@@ -205,7 +205,7 @@ class RestApiWorker(appContext: Context, workerParams: WorkerParameters) :
                                                 } catch (e: Exception) {
                                                     Log.w(logTag, e.stackTraceToString())
                                                     call.respondText(
-                                                        e.stackTraceToString(),
+                                                        e.toString(),
                                                         status = HttpStatusCode.InternalServerError
                                                     )
                                                     return@get
