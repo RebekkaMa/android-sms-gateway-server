@@ -41,11 +41,12 @@ class MessageManager(private val applicationContext: Context) {
 
         val sendStatusChannel = Channel<Int>(Channel.UNLIMITED)
 
-        applicationContext.registerReceiver(object : BroadcastReceiver() {
+        val broadcastReceiver = object : BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
                 sendStatusChannel.sendBlocking(resultCode)
             }
-        }, IntentFilter(sentAction))
+        }
+        applicationContext.registerReceiver(broadcastReceiver, IntentFilter(sentAction))
 
         val smsManager: SmsManager = SmsManager.getDefault()
         val multipartMessageArray = smsManager.divideMessage(message)
@@ -108,6 +109,7 @@ class MessageManager(private val applicationContext: Context) {
         } else {
             Log.i(logTag, "Message has not been successfully sent")
         }
+        applicationContext.unregisterReceiver(broadcastReceiver)
         return resultPair
     }
 
