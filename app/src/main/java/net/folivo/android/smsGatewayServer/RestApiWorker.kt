@@ -139,11 +139,20 @@ class RestApiWorker(appContext: Context, workerParams: WorkerParameters) :
                                             smsMessage.recipientPhoneNumber,
                                             smsMessage.message
                                         )
-                                    } catch (exception: java.lang.Exception) {
-                                        Log.i(logTag, exception.toString())
+                                    }
+                                    catch (illegalArgumentException : java.lang.IllegalArgumentException){
+                                        Log.i(logTag, illegalArgumentException.stackTraceToString())
+                                        call.respondText(
+                                                illegalArgumentException.toString(),
+                                                status = HttpStatusCode.BadRequest
+                                        )
+                                        return@post
+                                    }
+                                    catch (exception: java.lang.Exception) {
+                                        Log.i(logTag, exception.stackTraceToString())
                                         call.respondText(
                                             exception.toString(),
-                                            status = HttpStatusCode.BadRequest
+                                            status = HttpStatusCode.InternalServerError
                                         )
                                         return@post
                                     }
@@ -231,7 +240,7 @@ class RestApiWorker(appContext: Context, workerParams: WorkerParameters) :
             }
         } catch (exception: java.lang.Exception) {
             if (exception !is CancellationException) {
-                Log.w(logTag, exception.toString())
+                Log.w(logTag, exception.stackTraceToString())
                 return@coroutineScope Result.failure()
             }
         }
