@@ -167,8 +167,8 @@ class MessageManager(private val applicationContext: Context) {
         return when (resultCode) {
             Activity.RESULT_OK -> Pair(HttpStatusCode.OK, "Transmission successful")
             SmsManager.RESULT_ERROR_GENERIC_FAILURE -> Pair(
-                HttpStatusCode.InternalServerError,
-                "Transmission failed"
+                HttpStatusCode.BadRequest,
+                "Unknown generic failure"
             )
             SmsManager.RESULT_ERROR_RADIO_OFF -> Pair(
                 HttpStatusCode.InternalServerError,
