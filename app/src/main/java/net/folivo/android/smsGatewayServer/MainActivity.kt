@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private val smsDefaultAppResultLauncher = registerForActivityResult(
-        StartActivityForResult()
+            StartActivityForResult()
     ) {
         if (it.resultCode == Activity.RESULT_OK) {
             Log.i(logTag, "Default SMS app permission is granted.")
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val certificateResultLauncher = registerForActivityResult(
-        StartActivityForResult()
+            StartActivityForResult()
     ) {
         if (it.resultCode == Activity.RESULT_OK) {
             val intent = it.data
@@ -59,7 +59,6 @@ class MainActivity : AppCompatActivity() {
                 val editor = sharedPref.edit()
                 editor.putString(getString(R.string.saved_certificate_uri_str_key), uri.toString())
                 editor.commit()
-                findViewById<EditText>(R.id.editTextPathKeyStore).setText(uri.toString())
                 Log.i(logTag, "certificate uri: $uri")
 
                 val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -69,7 +68,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val storagePermissionResultLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
+            ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
             Log.i(logTag, "Storage permission is granted.")
@@ -79,18 +78,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val onSharedPreferenceChangeListener =
-        OnSharedPreferenceChangeListener { sharedPreferences, key ->
-            when (key) {
-                getString(R.string.saved_username_key) -> findViewById<EditText>(R.id.editTextUserName).hint =
-                    sharedPreferences.getString(key, "admin")
-                getString(R.string.saved_password_key) -> findViewById<EditText>(R.id.editTextPassword).hint =
-                    sharedPreferences.getString(key, "123")
-                getString(R.string.saved_keyStore_password_key) -> findViewById<EditText>(R.id.editTextKeyStorePassword).hint =
-                    sharedPreferences.getString(key, "")
-                getString(R.string.saved_certificate_uri_str_key) -> findViewById<EditText>(R.id.editTextPathKeyStore).hint =
-                    sharedPreferences.getString(key, "")
+            OnSharedPreferenceChangeListener { sharedPreferences, key ->
+                when (key) {
+                    getString(R.string.saved_certificate_uri_str_key) -> findViewById<EditText>(R.id.editTextPathKeyStore).setText(sharedPreferences.getString(key, ""))
+                }
             }
-        }
 
 
     @ExperimentalTime
@@ -103,57 +95,40 @@ class MainActivity : AppCompatActivity() {
         val editTextKeyStorePassword = findViewById<EditText>(R.id.editTextKeyStorePassword)
         val editTextPathKeyStore = findViewById<EditText>(R.id.editTextPathKeyStore)
 
-
         sharedPref = this.getPreferences(MODE_PRIVATE)
         sharedPref.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
 
-        editTextUserName.hint =
-            sharedPref.getString(getString(R.string.saved_username_key), "admin")
-        editTextPassword.hint =
-            sharedPref.getString(getString(R.string.saved_password_key), "123")
-        editTextKeyStorePassword.hint =
-            sharedPref.getString(getString(R.string.saved_keyStore_password_key), "")
-        editTextPathKeyStore.hint =
-            sharedPref.getString(getString(R.string.saved_certificate_uri_str_key), "")
-
-        findViewById<SwitchCompat>(R.id.switchStartServer).isEnabled = isCertificateAvailable()
+        editTextUserName.setText(sharedPref.getString(getString(R.string.saved_username_key), ""))
+        editTextPathKeyStore.setText(sharedPref.getString(getString(R.string.saved_certificate_uri_str_key), ""))
+        editTextKeyStorePassword.setText(sharedPref.getString(getString(R.string.saved_keyStore_password_key), ""))
+        editTextPassword.setText(sharedPref.getString(getString(R.string.saved_password_key), ""))
 
         findViewById<Button>(R.id.buttonCheckCertificateAvailability).setOnClickListener {
 
             val keyStorePassword =
-                editTextKeyStorePassword.text.toString()
+                    editTextKeyStorePassword.text.toString()
             val keyStorePath =
-                editTextPathKeyStore.text.toString()
+                    editTextPathKeyStore.text.toString()
             val editor = sharedPref.edit()
 
-
-            if (!keyStorePassword.isBlank()) {
-                editor.putString(
+            editor.putString(
                     getString(R.string.saved_keyStore_password_key),
                     keyStorePassword
-                )
-                editor.commit()
-            }
-
-            if (!keyStorePath.isBlank()) {
-                editor.putString(getString(R.string.saved_certificate_uri_str_key), keyStorePath)
-                editor.commit()
-            }
+            )
+            editor.putString(getString(R.string.saved_certificate_uri_str_key), keyStorePath)
+            editor.commit()
 
             if (!isCertificateAvailable()) {
-                Toast.makeText(this, "Error loading certificate: ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error loading certificate", Toast.LENGTH_SHORT).show()
                 findViewById<SwitchCompat>(R.id.switchStartServer).isEnabled = false
             } else {
                 Toast.makeText(this, "Certificate loaded successfully", Toast.LENGTH_SHORT).show()
                 findViewById<SwitchCompat>(R.id.switchStartServer).isEnabled = true
-
             }
-
         }
 
 
         findViewById<AppCompatImageButton>(R.id.buttonCertificate).setOnClickListener {
-
 
             if (storagePermissionGranted()) {
                 // Choose a directory using the system's file picker.
@@ -165,10 +140,7 @@ class MainActivity : AppCompatActivity() {
 
             } else {
                 storagePermissionResultLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-
             }
-
-
         }
 
         findViewById<SwitchCompat>(R.id.switchStartServer).setOnCheckedChangeListener { viewButton, isChecked ->
@@ -181,67 +153,66 @@ class MainActivity : AppCompatActivity() {
 
                     val editor = sharedPref.edit()
 
-                    if (!txtPassword.isBlank()) {
-                        editor.putString(getString(R.string.saved_password_key), txtPassword)
-                        editor.commit()
-                    }
+                    editor.putString(getString(R.string.saved_password_key), txtPassword)
+                    editor.putString(getString(R.string.saved_username_key), txtUserName)
+                    editor.commit()
 
-                    if (!txtUserName.isBlank()) {
-                        editor.putString(getString(R.string.saved_username_key), txtUserName)
-                        editor.commit()
-                    }
 
 
                     if (!isCertificateAvailable()) {
                         Toast.makeText(this, "Error loading the certificate", Toast.LENGTH_SHORT)
-                            .show()
+                                .show()
                         findViewById<SwitchCompat>(R.id.switchStartServer).isEnabled = false
+                        findViewById<Button>(R.id.buttonCheckCertificateAvailability).isEnabled = true
+                        viewButton.toggle()
+                        return@setOnCheckedChangeListener
                     }
 
 
                     val data =
-                        Data.Builder()
-                            .putString(
-                                "username",
-                                sharedPref.getString(
-                                    getString(R.string.saved_username_key),
-                                    "admin"
-                                )
-                            )
-                            .putString(
-                                "password",
-                                sharedPref.getString(getString(R.string.saved_password_key), "123")
-                            )
-                            .putString(
-                                "certificateUriStr",
-                                sharedPref.getString(
-                                    getString(R.string.saved_certificate_uri_str_key),
-                                    null
-                                )
-                            )
-                            .putString(
-                                "keyStorePassword",
-                                sharedPref.getString(
-                                    getString(R.string.saved_keyStore_password_key),
-                                    ""
-                                )
-                            )
-                            .build()
+                            Data.Builder()
+                                    .putString(
+                                            "username",
+                                            sharedPref.getString(
+                                                    getString(R.string.saved_username_key),
+                                                    ""
+                                            )
+                                    )
+                                    .putString(
+                                            "password",
+                                            sharedPref.getString(getString(R.string.saved_password_key), "")
+                                    )
+                                    .putString(
+                                            "certificateUriStr",
+                                            sharedPref.getString(
+                                                    getString(R.string.saved_certificate_uri_str_key),
+                                                    null
+                                            )
+                                    )
+                                    .putString(
+                                            "keyStorePassword",
+                                            sharedPref.getString(
+                                                    getString(R.string.saved_keyStore_password_key),
+                                                    ""
+                                            )
+                                    )
+                                    .build()
 
                     val restApiWorkRequest =
-                        OneTimeWorkRequestBuilder<RestApiWorker>().setInputData(data)
-                            .addTag(uniqueWorkName)
-                            .build()
+                            OneTimeWorkRequestBuilder<RestApiWorker>().setInputData(data)
+                                    .addTag(uniqueWorkName)
+                                    .build()
 
                     workManager.enqueueUniqueWork(
-                        uniqueWorkName,
-                        ExistingWorkPolicy.KEEP,
-                        restApiWorkRequest
+                            uniqueWorkName,
+                            ExistingWorkPolicy.KEEP,
+                            restApiWorkRequest
                     )
+                    findViewById<Button>(R.id.buttonCheckCertificateAvailability).isEnabled = false
                 }
                 if (!isChecked && isUniqueWorkScheduled(uniqueWorkName)) {
                     workManager.cancelUniqueWork(uniqueWorkName)
-
+                    findViewById<Button>(R.id.buttonCheckCertificateAvailability).isEnabled = true
                 }
             } else {
                 requestSmsDefaultAppState()
@@ -249,14 +220,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<Button>(R.id.buttonDeleteMessages).setOnClickListener{
+        findViewById<Button>(R.id.buttonDeleteMessages).setOnClickListener {
 
             var toastText = "Messages deleted"
             val messageManager = MessageManager(applicationContext)
             val durationInMillis = Duration.ofDays(14).toMillis()
             try {
                 messageManager.deleteInboxMessagesOlderThan(Calendar.getInstance().timeInMillis.minus(durationInMillis))
-            }catch (exception : Exception){
+            } catch (exception: Exception) {
                 Log.w(logTag, exception.toString())
                 toastText = "Messages could not be deleted"
             }
@@ -264,34 +235,36 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        workManager.getWorkInfosForUniqueWorkLiveData(uniqueWorkName).observe(this) {
+        workManager.getWorkInfosForUniqueWorkLiveData(uniqueWorkName).observe(this)
+        {
 
             when (it.singleOrNull()?.state) {
                 WorkInfo.State.SUCCEEDED, WorkInfo.State.CANCELLED -> {
                     Toast.makeText(
-                        this,
-                        getString(R.string.toast_server_terminated_successfully),
-                        Toast.LENGTH_SHORT
+                            this,
+                            getString(R.string.toast_server_terminated_successfully),
+                            Toast.LENGTH_SHORT
                     ).show()
                     Log.i(
-                        logTag,
-                        getString(R.string.toast_server_terminated_successfully) + ": " + it.single().state
+                            logTag,
+                            getString(R.string.toast_server_terminated_successfully) + ": " + it.single().state
                     )
                 }
                 WorkInfo.State.FAILED -> {
                     Toast.makeText(
-                        this,
-                        getString(R.string.toast_server_terminated_failed),
-                        Toast.LENGTH_SHORT
+                            this,
+                            getString(R.string.toast_server_terminated_failed),
+                            Toast.LENGTH_SHORT
                     ).show()
                     Log.i(
-                        logTag,
-                        getString(R.string.toast_server_terminated_failed) + ": " + it.single().state
+                            logTag,
+                            getString(R.string.toast_server_terminated_failed) + ": " + it.single().state
                     )
                     findViewById<SwitchCompat>(R.id.switchStartServer).toggle()
                 }
 
-                else -> {}
+                else -> {
+                }
             }
         }
     }
@@ -300,13 +273,13 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         val switch = findViewById<SwitchCompat>(R.id.switchStartServer)
         if ((isUniqueWorkScheduled(uniqueWorkName) && !switch.isChecked) || (!isUniqueWorkScheduled(
-                uniqueWorkName
-            ) && switch.isChecked)
+                        uniqueWorkName
+                ) && switch.isChecked)
         ) {
             switch.toggle()
         }
-
-
+        findViewById<Button>(R.id.buttonCheckCertificateAvailability).isEnabled = !isUniqueWorkScheduled(uniqueWorkName)
+        switch.isEnabled = isCertificateAvailable()
     }
 
 
@@ -314,6 +287,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         if (isUniqueWorkScheduled(uniqueWorkName)) {
             workManager.cancelUniqueWork(uniqueWorkName)
+            findViewById<Button>(R.id.buttonCheckCertificateAvailability).isEnabled = true
         }
     }
 
@@ -334,6 +308,7 @@ class MainActivity : AppCompatActivity() {
         return checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
     }
 
+
     private fun isDefaultSmsApp(): Boolean {
         return this.packageName == Telephony.Sms.getDefaultSmsPackage(this)
     }
@@ -349,7 +324,7 @@ class MainActivity : AppCompatActivity() {
                 val isRoleHeld = roleManager.isRoleHeld(RoleManager.ROLE_SMS)
                 if (!isRoleHeld) {
                     val roleRequestIntent =
-                        roleManager.createRequestRoleIntent(RoleManager.ROLE_SMS)
+                            roleManager.createRequestRoleIntent(RoleManager.ROLE_SMS)
 
                     smsDefaultAppResultLauncher.launch(roleRequestIntent)
 
@@ -365,23 +340,23 @@ class MainActivity : AppCompatActivity() {
     private fun isCertificateAvailable(): Boolean {
 
         val certificateUriStr =
-            sharedPref.getString(getString(R.string.saved_certificate_uri_str_key), "").orEmpty()
+                sharedPref.getString(getString(R.string.saved_certificate_uri_str_key), "").orEmpty()
         val keyStorePassword =
-            sharedPref.getString(getString(R.string.saved_keyStore_password_key), "").orEmpty()
+                sharedPref.getString(getString(R.string.saved_keyStore_password_key), "").orEmpty()
         val keyStore: KeyStore
         val certificateFileNameWithoutExtension: String
 
 
         try {
             certificateFileNameWithoutExtension =
-                RestApiWorker.getKeyStoreFileName(
-                    applicationContext.contentResolver,
-                    Uri.parse(certificateUriStr)
-                )
+                    RestApiWorker.getKeyStoreFileName(
+                            applicationContext.contentResolver,
+                            Uri.parse(certificateUriStr)
+                    )
             keyStore = RestApiWorker.loadKeyStore(
-                applicationContext.contentResolver,
-                Uri.parse(certificateUriStr),
-                keyStorePassword
+                    applicationContext.contentResolver,
+                    Uri.parse(certificateUriStr),
+                    keyStorePassword
             )
         } catch (exception: Exception) {
             Log.i(logTag, "isCertificateAvailable: false -> $exception")
@@ -389,12 +364,11 @@ class MainActivity : AppCompatActivity() {
         }
         if (keyStore.getCertificate(certificateFileNameWithoutExtension) == null) {
             Log.i(
-                logTag,
-                "isCertificateAvailable: false -> given alias does not exist or does not contain a certificate"
+                    logTag,
+                    "isCertificateAvailable: false -> given alias does not exist or does not contain a certificate"
             )
             return false
         }
         return true
     }
-
 }

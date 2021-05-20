@@ -56,7 +56,6 @@
                 android:layout_weight="3"
                 android:autofillHints="username"
                 android:ems="10"
-                android:hint="@string/editTextUserName_hint"
                 android:inputType="textPersonName" />
         </LinearLayout>
 
@@ -80,7 +79,6 @@
                 android:layout_weight="3"
                 android:autofillHints="password"
                 android:ems="10"
-                android:hint="@string/editTextPasswort_hint"
                 android:inputType="textPassword" />
         </LinearLayout>
 
